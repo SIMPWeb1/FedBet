@@ -1,5 +1,4 @@
 function toast(){
-    console.log("vào");
     let toastEle = document.getElementById("toast");
     console.log(toastEle);
     toastEle.classList.add("active-toast");
