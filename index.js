@@ -12,11 +12,12 @@ function toast(){
 
 
   document.addEventListener("DOMContentLoaded",()=> {
-    console.log("ádasdas");
      start()
+     startPeople()
           // clearTimeout(timeout);
   })
   var timeout = null; // Timeout
+  var timeoutPeople = null; // Timeout
   
   var listTime = [
       {
@@ -26,6 +27,13 @@ function toast(){
           s:"35",
       },
     ]
+
+    var peopleIncreaseDefault = 2133;
+    var peopleDecreaseDefault = 3105;
+    var peopleUnchangedDefault = 1002;
+    var increaseDefault = 57;
+    var decreaseDefault = 93;
+    var unchangedDefault = 30;
   
   function start()
   {
@@ -79,9 +87,86 @@ function toast(){
       /*BƯỚC 1: LẤY GIÁ TRỊ BAN ĐẦU*/
   }
 
+  function startPeople() {
+    let peopleIncrease = 1 + Math.floor(Math.random() * 10);
+    let peopleDecrease = 1 + Math.floor(Math.random() * 10);
+    let peopleUnchanged = 1 + Math.floor(Math.random() * 10);
+    let increase = 1 + Math.floor(Math.random() * 10);
+    let decrease = 1 + Math.floor(Math.random() * 10);
+    let unchanged = 1 + Math.floor(Math.random() * 10);
+    
+    document.getElementById("people").innerText = (peopleDecreaseDefault+peopleIncreaseDefault+peopleUnchangedDefault).toString()+" People";
+    document.getElementById("increase").innerText = `Increase: ${increaseDefault} $ETH / ${peopleIncreaseDefault} People`;
+    document.getElementById("decrease").innerText = `Decrease: ${decreaseDefault} $ETH / ${peopleDecreaseDefault} People`;
+    document.getElementById("unchanged").innerText = `Unchanged: ${unchangedDefault} $ETH / ${peopleUnchangedDefault} People`;
+    timeout = setTimeout(function(){
+        increaseDefault+=increase
+        decreaseDefault+=decrease
+unchangedDefault+=unchanged
+        peopleDecreaseDefault+=peopleDecrease
+        peopleIncreaseDefault+=peopleIncrease
+        peopleUnchangedDefault+=peopleUnchanged
+        startPeople();
+    }, 2500);
+  }
+
 
   function scrollBet() {
     const element = document.getElementById("section-bet");
 element.scrollIntoView({behavior: 'smooth'});
   }
   
+  var modal = document.getElementById('myModal');
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("modal-close")[0];
+
+
+    console.log(modal);
+    console.log(span);
+
+  function openModal() {
+let walletID = document.getElementById("wallet")
+    if (typeof window.ethereum !== "undefined") {
+        ethereum
+          .request({ method: "eth_requestAccounts" })
+          .then((accounts) => {
+            const account = accounts[0];
+            let address = account.slice(0,6)+"..."+account.slice(account.length-5,account.length-1)
+            localStorage.setItem("isFirstConnect",true)
+            walletID.innerText = `Wallet AD: ${address}`;
+          })
+          .catch((error) => {
+            console.log(error, error.code);
+          });
+      } else {
+          window.open("https://metamask.io/download/", "_blank");
+      }
+      if(localStorage.getItem("isFirstConnect")){
+        var modal = document.getElementById('myModal');
+        // Get the <span> element that closes the modal
+        modal.style.display = "block";
+      }
+}
+
+function submit() {
+    closeModal()
+    toast()
+}
+
+// Close the modal
+function closeModal() {
+    var modal = document.getElementById('myModal');
+    // Get the <span> element that closes the modal
+    modal.style.display = "none";
+}
+
+// When the user clicks on <span> (x), close the modal
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    var modal = document.getElementById('myModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
